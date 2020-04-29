@@ -9,6 +9,7 @@ const HomeScreen = () => {
       <SearchBar
         searchTerm={searchTerm}
         onSearchTermChange={(newTerm) => setSearchTerm(newTerm)}
+        onSearchTermSubmit={() => console.log("submitted")}
       />
       <Text>Home Screen</Text>
     </View>
