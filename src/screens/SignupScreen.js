@@ -42,6 +42,7 @@ const SignupScreen = ({ navigation }) => {
         onChangeText={setPassword}
         autoCorrect={false}
         autoCapitalize="none"
+        secureTextEntry
       />
       <Input
         label="Password Confirmation"
@@ -51,6 +52,7 @@ const SignupScreen = ({ navigation }) => {
         onChangeText={setPasswordConfirmation}
         autoCorrect={false}
         autoCapitalize="none"
+        secureTextEntry
       />
       <Button title="Sign Up" />
     </View>
