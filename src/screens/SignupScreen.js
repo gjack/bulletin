@@ -1,7 +1,6 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { View, StyleSheet } from "react-native";
-import { Text, Input, Button } from "react-native-elements";
-import { FontAwesome } from "@expo/vector-icons";
+import { Text, Button } from "react-native-elements";
 
 import { Context as AuthContext } from "../context/AuthContext";
 
