@@ -73,6 +73,12 @@ const SignupScreen = ({ navigation }) => {
           })
         }
       />
+      <Button
+        title="Hava an account? Go to Sign In"
+        type="clear"
+        onPress={() => navigation.navigate("Signin")}
+        buttonStyle={{ marginTop: 15 }}
+      />
     </View>
   );
 };
