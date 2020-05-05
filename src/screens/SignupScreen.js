@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { View, StyleSheet } from "react-native";
 import { Text, Input, Button } from "react-native-elements";
 import { FontAwesome } from "@expo/vector-icons";
+
+import { Context as AuthContext } from "../context/AuthContext";
 
 const SignupScreen = ({ navigation }) => {
   const [firstName, setFirstName] = useState("");
@@ -9,6 +11,8 @@ const SignupScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
+
+  const { state, signUp } = useContext(AuthContext);
 
   return (
     <View style={styles.containerStyles}>
@@ -54,7 +58,18 @@ const SignupScreen = ({ navigation }) => {
         autoCapitalize="none"
         secureTextEntry
       />
-      <Button title="Sign Up" />
+      <Button
+        title="Sign Up"
+        onPress={() =>
+          signUp({
+            firstName,
+            lastName,
+            email,
+            password,
+            passwordConfirmation,
+          })
+        }
+      />
     </View>
   );
 };
