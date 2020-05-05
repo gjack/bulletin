@@ -1,10 +1,13 @@
 import createDataContext from "./createDataContext";
 import bulletinApi from "../api/bulletin";
+import { AsyncStorage } from "react-native";
 
 const authReducer = (state, action) => {
   switch (action.type) {
     case "addError":
       return { ...state, errorMessage: action.payload };
+    case "signUpSuccess":
+      return { errorMessage: "", token: action.payload };
     default:
       return state;
   }
@@ -28,7 +31,8 @@ const signUp = (dispatch) => {
           password,
         },
       });
-      console.log(response.data);
+      await AsyncStorage.setItem("token", response.data.data.token);
+      dispatch({ type: "signUpSuccess", payload: response.data.data.token });
     } catch (err) {
       dispatch({
         type: "addError",
@@ -49,5 +53,5 @@ const signOut = (dispatch) => {
 export const { Provider, Context } = createDataContext(
   authReducer,
   { signUp, signIn, signOut },
-  { isSignedIn: false, errorMessage: "" }
+  { token: null, errorMessage: "" }
 );
