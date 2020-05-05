@@ -1,6 +1,7 @@
 import createDataContext from "./createDataContext";
 import bulletinApi from "../api/bulletin";
 import { AsyncStorage } from "react-native";
+import { navigate } from "../navigationRef";
 
 const authReducer = (state, action) => {
   switch (action.type) {
@@ -31,8 +32,10 @@ const signUp = (dispatch) => {
           password,
         },
       });
+
       await AsyncStorage.setItem("token", response.data.data.token);
       dispatch({ type: "signUpSuccess", payload: response.data.data.token });
+      navigate("mainFlow");
     } catch (err) {
       dispatch({
         type: "addError",
