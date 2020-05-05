@@ -7,7 +7,7 @@ const authReducer = (state, action) => {
   switch (action.type) {
     case "addError":
       return { ...state, errorMessage: action.payload };
-    case "signUpSuccess":
+    case "authSuccess":
       return { errorMessage: "", token: action.payload };
     default:
       return state;
@@ -34,7 +34,7 @@ const signUp = (dispatch) => {
       });
 
       await AsyncStorage.setItem("token", response.data.data.token);
-      dispatch({ type: "signUpSuccess", payload: response.data.data.token });
+      dispatch({ type: "authSuccess", payload: response.data.data.token });
       navigate("mainFlow");
     } catch (err) {
       dispatch({
@@ -46,7 +46,22 @@ const signUp = (dispatch) => {
 };
 
 const signIn = (dispatch) => {
-  return ({ email, password }) => {};
+  return async ({ email, password }) => {
+    try {
+      const response = await bulletinApi.post("/subscribers_sessions", {
+        email,
+        password,
+      });
+      await AsyncStorage.setItem("token", response.data.data.token);
+      dispatch({ type: "authSuccess", payload: response.data.data.token });
+      navigate("mainFlow");
+    } catch (error) {
+      dispatch({
+        type: "addError",
+        payload: "Wrong email or password",
+      });
+    }
+  };
 };
 
 const signOut = (dispatch) => {
