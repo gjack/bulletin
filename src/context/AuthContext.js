@@ -3,6 +3,8 @@ import bulletinApi from "../api/bulletin";
 
 const authReducer = (state, action) => {
   switch (action.type) {
+    case "addError":
+      return { ...state, errorMessage: action.payload };
     default:
       return state;
   }
@@ -28,7 +30,10 @@ const signUp = (dispatch) => {
       });
       console.log(response.data);
     } catch (err) {
-      console.log(err);
+      dispatch({
+        type: "addError",
+        payload: "Something went wrong with sign up.",
+      });
     }
   };
 };
@@ -44,5 +49,5 @@ const signOut = (dispatch) => {
 export const { Provider, Context } = createDataContext(
   authReducer,
   { signUp, signIn, signOut },
-  { isSignedIn: false }
+  { isSignedIn: false, errorMessage: "" }
 );

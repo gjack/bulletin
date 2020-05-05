@@ -58,6 +58,9 @@ const SignupScreen = ({ navigation }) => {
         autoCapitalize="none"
         secureTextEntry
       />
+      {state.errorMessage ? (
+        <Text style={styles.errorStyles}>{state.errorMessage}</Text>
+      ) : null}
       <Button
         title="Sign Up"
         onPress={() =>
@@ -89,6 +92,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     marginBottom: 200,
+  },
+  errorStyles: {
+    fontSize: 18,
+    color: "red",
+    marginLeft: 15,
+    marginBottom: 15,
   },
 });
 
