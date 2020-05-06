@@ -33,8 +33,18 @@ const authReducer = (state, action) => {
 const tryLocalLogin = (dispatch) => async () => {
   const token = await AsyncStorage.getItem("token");
   if (token) {
-    dispatch({ type: "authSuccess", payload: token });
-    navigate("mainFlow");
+    try {
+      const response = await bulletinApi.get("/subscribers_sessions");
+      const { email, first_name, last_name } = response.data.data.subscriber;
+      dispatch({
+        type: "authSuccess",
+        payload: { token, email, firstName: first_name, lastName: last_name },
+      });
+      navigate("mainFlow");
+    } catch (error) {
+      dispatch({ type: "signOut" });
+      navigate("loginFlow");
+    }
   } else {
     navigate("loginFlow");
   }
