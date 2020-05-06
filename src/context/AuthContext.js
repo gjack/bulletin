@@ -8,11 +8,23 @@ const authReducer = (state, action) => {
     case "addError":
       return { ...state, errorMessage: action.payload };
     case "authSuccess":
-      return { errorMessage: "", token: action.payload };
+      return {
+        errorMessage: "",
+        token: action.payload.token,
+        firstName: action.payload.firstName,
+        lastName: action.payload.lastName,
+        email: action.payload.email,
+      };
     case "clearErrorMessage":
       return { ...state, errorMessage: "" };
     case "signOut":
-      return { token: null, errorMessage: "" };
+      return {
+        token: null,
+        errorMessage: "",
+        firstName: null,
+        lastName: null,
+        email: null,
+      };
     default:
       return state;
   }
@@ -50,9 +62,17 @@ const signUp = (dispatch) => {
           password,
         },
       });
-
-      await AsyncStorage.setItem("token", response.data.data.token);
-      dispatch({ type: "authSuccess", payload: response.data.data.token });
+      const { token, subscriber } = response.data.data;
+      await AsyncStorage.setItem("token", token);
+      dispatch({
+        type: "authSuccess",
+        payload: {
+          token: token,
+          firstName: subscriber.first_name,
+          lastName: subscriber.last_name,
+          email: subscriber.email,
+        },
+      });
       navigate("mainFlow");
     } catch (err) {
       dispatch({
@@ -70,8 +90,17 @@ const signIn = (dispatch) => {
         email,
         password,
       });
-      await AsyncStorage.setItem("token", response.data.data.token);
-      dispatch({ type: "authSuccess", payload: response.data.data.token });
+      const { token, subscriber } = response.data.data;
+      await AsyncStorage.setItem("token", token);
+      dispatch({
+        type: "authSuccess",
+        payload: {
+          token: token,
+          firstName: subscriber.first_name,
+          lastName: subscriber.last_name,
+          email: subscriber.email,
+        },
+      });
       navigate("mainFlow");
     } catch (error) {
       dispatch({
@@ -101,5 +130,11 @@ const signOut = (dispatch) => {
 export const { Provider, Context } = createDataContext(
   authReducer,
   { signUp, signIn, signOut, clearErrorMessage, tryLocalLogin },
-  { token: null, errorMessage: "" }
+  {
+    token: null,
+    errorMessage: "",
+    firstName: null,
+    lastName: null,
+    email: null,
+  }
 );
