@@ -11,6 +11,8 @@ const authReducer = (state, action) => {
       return { errorMessage: "", token: action.payload };
     case "clearErrorMessage":
       return { ...state, errorMessage: "" };
+    case "signOut":
+      return { token: null, errorMessage: "" };
     default:
       return state;
   }
@@ -81,7 +83,19 @@ const signIn = (dispatch) => {
 };
 
 const signOut = (dispatch) => {
-  return () => {};
+  return async () => {
+    try {
+      await bulletinApi.delete("/subscribers_sessions");
+      await AsyncStorage.removeItem("token");
+      dispatch({ type: "signOut" });
+      navigate("loginFlow");
+    } catch (error) {
+      dispatch({
+        type: "addError",
+        payload: "There was a problem signing you out.",
+      });
+    }
+  };
 };
 
 export const { Provider, Context } = createDataContext(
