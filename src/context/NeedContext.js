@@ -5,20 +5,46 @@ import { navigate } from "../navigationRef";
 const needReducer = (state, action) => {
   switch (action.type) {
     case "fetchNeeds":
-      return action.payload;
+      return { needs: action.payload, errorMessage: "" };
+    case "addError":
+      return { ...state, errorMessage: action.payload };
     default:
       return state;
   }
 };
 
 const fetchNeeds = (dispatch) => async () => {
-  const response = await bulletinApi.get("/needs");
-  console.log(response.data);
-  dispatch({ type: "fetchNeeds", payload: response.data });
+  try {
+    const response = await bulletinApi.get("/needs");
+    dispatch({ type: "fetchNeeds", payload: response.data.data });
+  } catch (error) {
+    dispatch({
+      type: "addError",
+      payload: "Something went wrong with your request. Please, try again.",
+    });
+  }
+};
+
+const createNeed = (dispatch) => async ({
+  title,
+  description,
+  organizationId,
+}) => {
+  try {
+    const response = await bulletinApi.post("/needs", {
+      need: { title, description, organization_id: organizationId },
+    });
+    navigate("RequestsList");
+  } catch (error) {
+    dispatch({
+      type: "addError",
+      payload: "Something went wrong with your request. Please, try again.",
+    });
+  }
 };
 
 export const { Provider, Context } = createDataContext(
   needReducer,
-  { fetchNeeds },
-  []
+  { fetchNeeds, createNeed },
+  { needs: [], errorMessage: "" }
 );
