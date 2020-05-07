@@ -14,6 +14,7 @@ import SignupScreen from "./src/screens/SignupScreen";
 
 import { Provider as AuthProvider } from "./src/context/AuthContext";
 import { Provider as NeedProvider } from "./src/context/NeedContext";
+import { Provider as OrganizationProvider } from "./src/context/OrganizationContext";
 import { setNavigator } from "./src/navigationRef";
 
 const requestListFlow = createStackNavigator({
@@ -43,10 +44,12 @@ const App = createAppContainer(switchNavigator);
 
 export default () => {
   return (
-    <NeedProvider>
-      <AuthProvider>
-        <App ref={(navigator) => setNavigator(navigator)} />
-      </AuthProvider>
-    </NeedProvider>
+    <OrganizationProvider>
+      <NeedProvider>
+        <AuthProvider>
+          <App ref={(navigator) => setNavigator(navigator)} />
+        </AuthProvider>
+      </NeedProvider>
+    </OrganizationProvider>
   );
 };
