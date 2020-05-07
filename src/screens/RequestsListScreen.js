@@ -1,17 +1,15 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { View, StyleSheet, Button, FlatList } from "react-native";
 import { Text, ListItem } from "react-native-elements";
+import { NavigationEvents } from "react-navigation";
 import { Context as NeedContext } from "../context/NeedContext";
 
 const RequestsListScreen = ({ navigation }) => {
   const { state, fetchNeeds } = useContext(NeedContext);
 
-  useEffect(() => {
-    fetchNeeds();
-  }, []);
-
   return (
     <View>
+      <NavigationEvents onWillFocus={fetchNeeds} />
       <Text h3>Needed</Text>
       <FlatList
         data={state.needs}
