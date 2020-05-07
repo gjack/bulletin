@@ -13,9 +13,11 @@ const needReducer = (state, action) => {
   }
 };
 
-const fetchNeeds = (dispatch) => async () => {
+const fetchNeeds = (dispatch) => async ({ searchTerm, organizationId }) => {
   try {
-    const response = await bulletinApi.get("/needs");
+    const response = await bulletinApi.get("/needs", {
+      params: { query: searchTerm, organization_id: organizationId },
+    });
     dispatch({ type: "fetchNeeds", payload: response.data.data });
   } catch (error) {
     dispatch({
