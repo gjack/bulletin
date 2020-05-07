@@ -17,7 +17,7 @@ const RequestsListScreen = ({ navigation }) => {
       <SearchBar
         searchTerm={searchTerm}
         onSearchTermChange={setSearchTerm}
-        onSearchTermSubmit={() => fetchNeeds()}
+        onSearchTermSubmit={() => fetchNeeds({ searchTerm })}
       />
       <FlatList
         data={state.needs}
