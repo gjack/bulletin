@@ -1,18 +1,34 @@
-import React, { useContext } from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+import React, { useContext, useEffect } from "react";
+import { View, StyleSheet, Button, FlatList } from "react-native";
+import { Text, ListItem } from "react-native-elements";
 import { Context as NeedContext } from "../context/NeedContext";
 
 const RequestsListScreen = ({ navigation }) => {
-  const { fetchNeeds } = useContext(NeedContext);
+  const { state, fetchNeeds } = useContext(NeedContext);
+
+  useEffect(() => {
+    fetchNeeds();
+  }, []);
+
   return (
-    <>
-      <Text style={{ fontSize: 40 }}>RequestsListScreen</Text>
-      <Button
-        title="Go to Request Detail"
-        onPress={() => navigation.navigate("RequestDetail")}
+    <View>
+      <Text h3>Needed</Text>
+      <FlatList
+        data={state.needs}
+        keyExtractor={(need) => `Need#${need.id}`}
+        renderItem={({ item }) => (
+          <ListItem
+            title={item.title}
+            subtitle={item.organization.name}
+            onPress={() =>
+              navigation.navigate("RequestDetail", { _id: item.id })
+            }
+            bottomDivider
+            chevron
+          />
+        )}
       />
-      <Button title="Get List of Needs" onPress={fetchNeeds} />
-    </>
+    </View>
   );
 };
 
