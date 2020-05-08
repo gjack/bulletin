@@ -4,11 +4,14 @@ import { Text, Card, Icon, Divider } from "react-native-elements";
 import { Feather } from "@expo/vector-icons";
 
 import { Context as NeedContext } from "../context/NeedContext";
+import { Context as AuthContext } from "../context/AuthContext";
 
 const RequestDetailScreen = ({ navigation }) => {
   const needId = navigation.getParam("_id");
   const { state } = useContext(NeedContext);
+  const { state: subscriberState } = useContext(AuthContext);
   const need = state.needs.find((n) => n.id === needId);
+
   return (
     <View>
       <Card
@@ -22,13 +25,15 @@ const RequestDetailScreen = ({ navigation }) => {
             }}
           >
             <Text h4>{need.title}</Text>
-            <Icon
-              name="edit"
-              type="feather"
-              color="black"
-              containerStyle={styles.iconContainerStyles}
-              iconStyle={styles.iconStyles}
-            />
+            {subscriberState.id === need.author.id ? (
+              <Icon
+                name="edit"
+                type="feather"
+                color="black"
+                containerStyle={styles.iconContainerStyles}
+                iconStyle={styles.iconStyles}
+              />
+            ) : null}
           </View>
         }
       >
