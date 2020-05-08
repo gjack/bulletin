@@ -3,7 +3,7 @@ import { AsyncStorage } from "react-native";
 // using url from ngrok free version
 // will need to update every 8 hours
 const instance = axios.create({
-  baseURL: "http://59e4bd88.ngrok.io/v1",
+  baseURL: "http://0f8a6507.ngrok.io/v1",
 });
 
 instance.interceptors.request.use(
