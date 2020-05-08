@@ -14,12 +14,14 @@ const authReducer = (state, action) => {
         firstName: action.payload.firstName,
         lastName: action.payload.lastName,
         email: action.payload.email,
+        id: action.payload.id,
       };
     case "clearErrorMessage":
       return { ...state, errorMessage: "" };
     case "signOut":
       return {
         token: null,
+        id: null,
         errorMessage: "",
         firstName: null,
         lastName: null,
@@ -35,10 +37,21 @@ const tryLocalLogin = (dispatch) => async () => {
   if (token) {
     try {
       const response = await bulletinApi.get("/subscribers_sessions");
-      const { email, first_name, last_name } = response.data.data.subscriber;
+      const {
+        email,
+        id,
+        first_name,
+        last_name,
+      } = response.data.data.subscriber;
       dispatch({
         type: "authSuccess",
-        payload: { token, email, firstName: first_name, lastName: last_name },
+        payload: {
+          token,
+          email,
+          id,
+          firstName: first_name,
+          lastName: last_name,
+        },
       });
       navigate("mainFlow");
     } catch (error) {
@@ -78,6 +91,7 @@ const signUp = (dispatch) => {
         type: "authSuccess",
         payload: {
           token: token,
+          id: subscriber.id,
           firstName: subscriber.first_name,
           lastName: subscriber.last_name,
           email: subscriber.email,
@@ -106,6 +120,7 @@ const signIn = (dispatch) => {
         type: "authSuccess",
         payload: {
           token: token,
+          id: subscriber.id,
           firstName: subscriber.first_name,
           lastName: subscriber.last_name,
           email: subscriber.email,
@@ -143,6 +158,7 @@ export const { Provider, Context } = createDataContext(
   {
     token: null,
     errorMessage: "",
+    id: null,
     firstName: null,
     lastName: null,
     email: null,
